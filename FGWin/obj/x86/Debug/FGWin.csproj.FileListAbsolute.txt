@@ -1,0 +1,5 @@
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\bin\Debug\FGWin.exe
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\bin\Debug\FGWin.pdb
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\obj\x86\Debug\FGWin.exe
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\obj\x86\Debug\FGWin.pdb
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\obj\x86\Debug\FGWin.csprojResolveAssemblyReference.cache
