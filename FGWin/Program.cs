@@ -31,7 +31,7 @@ namespace FGWin
                         try { Console.WriteLine("PRCPath=\"" + prc.MainModule.FileName + "\""); }
                         catch { }
                         Console.WriteLine("PRCName=\""+prc.ProcessName+"\"");
-                        Console.WriteLine("BROADCAST(PRCName+\" is activated\")");
+                        Console.WriteLine("BROADCAST([PRC_START]"+prc.ProcessName+")");
                         if (prc.MainWindowTitle != "")
                         {
                             Console.WriteLine("PRCTitle=\"" + prc.MainWindowTitle + "\"");
