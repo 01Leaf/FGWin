@@ -8,10 +8,25 @@ using System.Threading;
 using System.Net;
 using System.IO;
 
+
 namespace FGWin
 {
+
     class Program
     {
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;        // x position of upper-left corner
+            public int Top;         // y position of upper-left corner
+            public int Right;       // x position of lower-right corner
+            public int Bottom;      // y position of lower-right corner
+        }
+
         static bool EXITING = false;
 
 
@@ -22,17 +37,17 @@ namespace FGWin
 
             Console.WriteLine("LinkRID(WEBMON,true)");
             string input;
-            string url="";
+            string url = "";
 
             while (true)
             {
                 input = Console.ReadLine();
-                if (input.StartsWith("http") && input!=url)
+                if (input.StartsWith("http") && input != url)
                 {
                     url = input;
                     try
                     {
-                        new Thread(new ThreadStart(delegate(){WebMon(url);})).Start();
+                        new Thread(new ThreadStart(delegate() { WebMon(url); })).Start();
                     }
                     catch { }
                 }
@@ -44,10 +59,11 @@ namespace FGWin
             string tmp;
             string current;
             WebClient wc = new WebClient();
-            current=wc.DownloadString(url);
-            tmp=current;
+            current = wc.DownloadString(url);
+            tmp = current;
 
-            while(tmp==current){
+            while (tmp == current)
+            {
                 current = wc.DownloadString(url);
                 Thread.Sleep(1000);
             }
@@ -58,6 +74,7 @@ namespace FGWin
 
         static void PrcMon()
         {
+            RECT rect;
             List<string> Current = new List<string>();
             Process[] processCollection = Process.GetProcesses();
             foreach (Process prc in processCollection)
@@ -71,13 +88,25 @@ namespace FGWin
                 {
                     if (prc.ProcessName != "" && !Current.Contains(prc.ProcessName))
                     {
-                        try { Console.WriteLine("PRCPath=\"" + prc.MainModule.FileName + "\""); }
-                        catch { }
-                        Console.WriteLine("PRCName=\"" + prc.ProcessName + "\"");
-                        Console.WriteLine("BROADCAST([PRC_START]" + prc.ProcessName + ")");
-                        if (prc.MainWindowTitle != "")
+
+                        try
                         {
-                            Console.WriteLine("PRCTitle=\"" + prc.MainWindowTitle + "\"");
+                            GetWindowRect(prc.MainWindowHandle, out rect);
+                            if (rect.Top != rect.Bottom && rect.Left != rect.Right)
+                            {
+
+                                try { Console.WriteLine("PRCPath=\"" + prc.MainModule.FileName + "\""); }
+                                catch { }
+                                Console.WriteLine("PRCName=\"" + prc.ProcessName + "\"");
+                                Console.WriteLine("BROADCAST([PRC_START]" + prc.ProcessName + ")");
+                                if (prc.MainWindowTitle != "")
+                                {
+                                    Console.WriteLine("PRCTitle=\"" + prc.MainWindowTitle + "\"");
+                                }
+                            }
+                        }
+                        catch
+                        {
                         }
 
                     }
