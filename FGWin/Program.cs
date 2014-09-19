@@ -49,7 +49,7 @@ namespace FGWin
 
             while(tmp==current){
                 current = wc.DownloadString(url);
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
 
             Console.WriteLine("BROADCAST([WEB_UPDATE]" + url + ")");
@@ -98,7 +98,7 @@ namespace FGWin
                     Current.Add(prc.ProcessName);
                 }
 
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(1000);
             }
         }
     }
