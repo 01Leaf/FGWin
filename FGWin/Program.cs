@@ -28,10 +28,23 @@ namespace FGWin
         }
 
         static bool EXITING = false;
-
+        static int AZUSAPid = -1;
 
         static void Main(string[] args)
         {
+
+            while (AZUSAPid == -1)
+            {
+                Console.WriteLine("GetAzusaPid()");
+                try
+                {
+                    AZUSAPid=Convert.ToInt32(Console.ReadLine());
+                    break;
+                }
+                catch
+                {
+                }
+            }
 
             new Thread(new ThreadStart(PrcMon)).Start();
 
@@ -62,14 +75,19 @@ namespace FGWin
             current = wc.DownloadString(url);
             tmp = current;
 
-            while (tmp == current)
+            while (true)
             {
                 current = wc.DownloadString(url);
-                Thread.Sleep(1000);
+                if (tmp == current)
+                {
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    Console.WriteLine("EVENT([WEB_UPDATE]" + url + ")");
+                    tmp = current;
+                }
             }
-
-            Console.WriteLine("BROADCAST([WEB_UPDATE]" + url + ")");
-
         }
 
         static void PrcMon()
@@ -83,6 +101,13 @@ namespace FGWin
             }
             while (!EXITING)
             {
+                try { Process.GetProcessById(AZUSAPid); }
+                catch
+                {
+                    Environment.Exit(0);
+                    break;
+                }
+
                 processCollection = Process.GetProcesses();
                 foreach (Process prc in processCollection)
                 {
@@ -98,7 +123,7 @@ namespace FGWin
                                 try { Console.WriteLine("PRCPath=\"" + prc.MainModule.FileName + "\""); }
                                 catch { }
                                 Console.WriteLine("PRCName=\"" + prc.ProcessName + "\"");
-                                Console.WriteLine("BROADCAST([PRC_START]" + prc.ProcessName + ")");
+                                Console.WriteLine("EVENT([PRC_START]" + prc.ProcessName + ")");
                                 if (prc.MainWindowTitle != "")
                                 {
                                     Console.WriteLine("PRCTitle=\"" + prc.MainWindowTitle + "\"");
@@ -116,7 +141,7 @@ namespace FGWin
                 {
                     if (Process.GetProcessesByName(prc).Count() == 0)
                     {
-                        Console.WriteLine("BROADCAST([PRC_END]" + prc + ")");
+                        Console.WriteLine("EVENT([PRC_END]" + prc + ")");
                     }
                 }
 
