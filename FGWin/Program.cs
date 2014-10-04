@@ -35,7 +35,7 @@ namespace FGWin
 
             while (AZUSAPid == -1)
             {
-                Console.WriteLine("GetAzusaPid()");
+                WriteLine("GetAzusaPid()");
                 try
                 {
                     AZUSAPid=Convert.ToInt32(Console.ReadLine());
@@ -48,13 +48,13 @@ namespace FGWin
 
             new Thread(new ThreadStart(PrcMon)).Start();
 
-            Console.WriteLine("LinkRID(WEBMON,true)");
+            WriteLine("LinkRID(WEBMON,true)");
             string input;
             string url = "";
 
             while (true)
             {
-                input = Console.ReadLine();
+                input = System.Web.HttpUtility.UrlDecode(Console.ReadLine());
                 if (input.StartsWith("http") && input != url)
                 {
                     url = input;
@@ -65,6 +65,11 @@ namespace FGWin
                     catch { }
                 }
             }
+        }
+
+        static void WriteLine(string msg)
+        {
+            Console.WriteLine(System.Web.HttpUtility.UrlEncode(msg));
         }
 
         static void WebMon(string url)
@@ -84,7 +89,7 @@ namespace FGWin
                 }
                 else
                 {
-                    Console.WriteLine("EVENT([WEB_UPDATE]" + url + ")");
+                    WriteLine("EVENT([WEB_UPDATE]" + url + ")");
                     tmp = current;
                 }
             }
@@ -120,13 +125,13 @@ namespace FGWin
                             if (rect.Top != rect.Bottom && rect.Left != rect.Right)
                             {
 
-                                try { Console.WriteLine("PRCPath=\"" + prc.MainModule.FileName + "\""); }
+                                try { WriteLine("PRCPath=\"" + prc.MainModule.FileName + "\""); }
                                 catch { }
-                                Console.WriteLine("PRCName=\"" + prc.ProcessName + "\"");
-                                Console.WriteLine("EVENT([PRC_START]" + prc.ProcessName + ")");
+                                WriteLine("PRCName=\"" + prc.ProcessName + "\"");
+                                WriteLine("EVENT([PRC_START]" + prc.ProcessName + ")");
                                 if (prc.MainWindowTitle != "")
                                 {
-                                    Console.WriteLine("PRCTitle=\"" + prc.MainWindowTitle + "\"");
+                                    WriteLine("PRCTitle=\"" + prc.MainWindowTitle + "\"");
                                 }
                             }
                         }
@@ -141,7 +146,7 @@ namespace FGWin
                 {
                     if (Process.GetProcessesByName(prc).Count() == 0)
                     {
-                        Console.WriteLine("EVENT([PRC_END]" + prc + ")");
+                        WriteLine("EVENT([PRC_END]" + prc + ")");
                     }
                 }
 

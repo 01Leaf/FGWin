@@ -1,0 +1,5 @@
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\bin\Release\FGWin.exe.config
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\bin\Release\FGWin.exe
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\bin\Release\FGWin.pdb
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\obj\x86\Release\FGWin.exe
+C:\Users\ytc\Documents\GitHub\FGWin\FGWin\obj\x86\Release\FGWin.pdb
